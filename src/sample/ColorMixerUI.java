@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -33,6 +34,8 @@ public class ColorMixerUI extends GridPane {
 	private RadioButton setPurple;
 
 	private Rectangle display;
+
+	private Button exit;
 
 	private ColorMixerPM pm;
 
@@ -73,6 +76,9 @@ public class ColorMixerUI extends GridPane {
 		display = new Rectangle();
 		display.setHeight(150);
 		display.setWidth(150);
+
+		exit = new Button("Exit");
+		exit.setMaxWidth(Double.MAX_VALUE);
 	}
 
 	private void layoutControls() {
@@ -84,14 +90,13 @@ public class ColorMixerUI extends GridPane {
 		sliderColumn.setHgrow(Priority.ALWAYS);
 
 		ColumnConstraints valueColumn = new ColumnConstraints();
-		//valueColumn.setHalignment(HPos.RIGHT);
 		valueColumn.setMinWidth(30);
 
 		getColumnConstraints().addAll(sliderColumn, valueColumn, valueColumn);
 
 		RowConstraints rc = new RowConstraints();
 		rc.setVgrow(Priority.ALWAYS);
-		getRowConstraints().addAll(rc, rc, rc,rc,rc, rc, rc, rc);
+		getRowConstraints().addAll(rc, rc, rc,rc,rc, rc, rc, rc, rc);
 
 		add(redSlider,0,0);
 		add(redLabel,1,0);
@@ -105,15 +110,14 @@ public class ColorMixerUI extends GridPane {
 		add(blueLabel,1,2);
 		add(hexBlueLabel,2,2);
 
-
-
-
 		add(setRed,1,3);
 		add(setBlue,1,4);
 		add(setGreen,1,5);
 		add(setYellow,1,6);
 		add(setPurple,1,7);
 		add(display, 0, 3,1,5);
+
+		add(exit,0,8,3,1);
 
 		setPrefHeight(getPrefHeight() +200);
 	}
@@ -149,6 +153,9 @@ public class ColorMixerUI extends GridPane {
 			pm.setBlue(128);
 			setPurple.setSelected(false);
 		});
+		exit.setOnAction(event -> {
+			Platform.exit();
+		});
 	}
 
 	private void setupValueChangedListeners() {
@@ -156,7 +163,7 @@ public class ColorMixerUI extends GridPane {
 
 	private void setupBindings() {
 		redSlider.valueProperty().bindBidirectional(pm.redProperty());
-		redLabel.textProperty().bind(pm.redProperty().asString()); //unidirektional da Label vom Benutzer nicht editiert werden kann
+		redLabel.textProperty().bind(pm.redProperty().asString());
 		hexRedLabel.textProperty().bind(pm.hexRedProperty());
 
 		greenSlider.valueProperty().bindBidirectional((pm.greenProperty()));
