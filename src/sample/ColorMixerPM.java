@@ -64,7 +64,6 @@ public class ColorMixerPM {
         setHexRed(Integer.toHexString(getRed()));
         setHexBlue(Integer.toHexString(getBlue()));
         setHexGreen(Integer.toHexString(getGreen()));
-
     }
 
     private void updateColor() {

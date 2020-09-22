@@ -2,11 +2,14 @@ package sample;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Rectangle;
 
 public class ColorMixerUI extends GridPane {
@@ -22,6 +25,12 @@ public class ColorMixerUI extends GridPane {
 	private Label hexRedLabel;
 	private Label hexGreenLabel;
 	private Label hexBlueLabel;
+
+	private RadioButton setRed;
+	private RadioButton setGreen;
+	private RadioButton setBlue;
+	private RadioButton setYellow;
+	private RadioButton setPurple;
 
 	private Rectangle display;
 
@@ -55,7 +64,15 @@ public class ColorMixerUI extends GridPane {
 		hexGreenLabel = new Label();
 		hexBlueLabel = new Label();
 
+		setRed = new RadioButton("Red");
+		setBlue = new RadioButton("Blue");
+		setGreen = new RadioButton("Green");
+		setYellow = new RadioButton("Yellow");
+		setPurple = new RadioButton("Purple");
+
 		display = new Rectangle();
+		display.setHeight(150);
+		display.setWidth(150);
 	}
 
 	private void layoutControls() {
@@ -66,24 +83,72 @@ public class ColorMixerUI extends GridPane {
 		ColumnConstraints sliderColumn = new ColumnConstraints();
 		sliderColumn.setHgrow(Priority.ALWAYS);
 
-		ColumnConstraints valueColumn = new ColumnConstraints(30);
-		valueColumn.setHalignment(HPos.RIGHT);
+		ColumnConstraints valueColumn = new ColumnConstraints();
+		//valueColumn.setHalignment(HPos.RIGHT);
+		valueColumn.setMinWidth(30);
 
-		ColumnConstraints valueHex = new ColumnConstraints(30);
-		valueColumn.setHalignment(HPos.RIGHT);
+		getColumnConstraints().addAll(sliderColumn, valueColumn, valueColumn);
 
-		getColumnConstraints().addAll(sliderColumn, valueColumn, valueHex);
+		RowConstraints rc = new RowConstraints();
+		rc.setVgrow(Priority.ALWAYS);
+		getRowConstraints().addAll(rc, rc, rc,rc,rc, rc, rc, rc);
 
-		addRow(0, redSlider  , redLabel, hexRedLabel);
-		addRow(1, greenSlider, greenLabel, hexGreenLabel);
-		addRow(2, blueSlider , blueLabel, hexBlueLabel);
+		add(redSlider,0,0);
+		add(redLabel,1,0);
+		add(hexRedLabel,2,0);
 
-		add(display, 0, 3, 3, 1);
+		add(greenSlider,0,1);
+		add(greenLabel,1,1);
+		add(hexGreenLabel,2,1);
 
-		setPrefHeight(getPrefHeight() + 200);
+		add(blueSlider,0,2);
+		add(blueLabel,1,2);
+		add(hexBlueLabel,2,2);
+
+
+
+
+		add(setRed,1,3);
+		add(setBlue,1,4);
+		add(setGreen,1,5);
+		add(setYellow,1,6);
+		add(setPurple,1,7);
+		add(display, 0, 3,1,5);
+
+		setPrefHeight(getPrefHeight() +200);
 	}
 
 	private void setupEventHandlers() {
+		setRed.setOnAction(event -> {
+			pm.setRed(255);
+			pm.setGreen(0);
+			pm.setBlue(0);
+			setRed.setSelected(false);
+		});
+		setBlue.setOnAction(event -> {
+			pm.setRed(0);
+			pm.setGreen(0);
+			pm.setBlue(255);
+			setBlue.setSelected(false);
+		});
+		setGreen.setOnAction(event -> {
+			pm.setRed(0);
+			pm.setGreen(255);
+			pm.setBlue(0);
+			setGreen.setSelected(false);
+		});
+		setYellow.setOnAction(event -> {
+			pm.setRed(217);
+			pm.setGreen(192);
+			pm.setBlue(34);
+			setYellow.setSelected(false);
+		});
+		setPurple.setOnAction(event -> {
+			pm.setRed(128);
+			pm.setGreen(0);
+			pm.setBlue(128);
+			setPurple.setSelected(false);
+		});
 	}
 
 	private void setupValueChangedListeners() {
@@ -104,12 +169,5 @@ public class ColorMixerUI extends GridPane {
 
 		display.fillProperty().bind(pm.colorProperty());
 
-		display.widthProperty().bind(widthProperty()
-                                             .subtract(20));
-		display.heightProperty().bind(heightProperty()
-                                              .subtract(redSlider.heightProperty())
-                                              .subtract(greenSlider.heightProperty())
-                                              .subtract(blueSlider.heightProperty())
-                                              .subtract(50));
 	}
 }
