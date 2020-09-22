@@ -19,6 +19,10 @@ public class ColorMixerUI extends GridPane {
 	private Label greenLabel;
 	private Label blueLabel;
 
+	private Label hexRedLabel;
+	private Label hexGreenLabel;
+	private Label hexBlueLabel;
+
 	private Rectangle display;
 
 	private ColorMixerPM pm;
@@ -47,6 +51,10 @@ public class ColorMixerUI extends GridPane {
 		greenLabel = new Label();
 		blueLabel  = new Label();
 
+		hexRedLabel = new Label();
+		hexGreenLabel = new Label();
+		hexBlueLabel = new Label();
+
 		display = new Rectangle();
 	}
 
@@ -61,13 +69,16 @@ public class ColorMixerUI extends GridPane {
 		ColumnConstraints valueColumn = new ColumnConstraints(30);
 		valueColumn.setHalignment(HPos.RIGHT);
 
-		getColumnConstraints().addAll(sliderColumn, valueColumn);
+		ColumnConstraints valueHex = new ColumnConstraints(30);
+		valueColumn.setHalignment(HPos.RIGHT);
 
-		addRow(0, redSlider  , redLabel);
-		addRow(1, greenSlider, greenLabel);
-		addRow(2, blueSlider , blueLabel);
+		getColumnConstraints().addAll(sliderColumn, valueColumn, valueHex);
 
-		add(display, 0, 3, 2, 1);
+		addRow(0, redSlider  , redLabel, hexRedLabel);
+		addRow(1, greenSlider, greenLabel, hexGreenLabel);
+		addRow(2, blueSlider , blueLabel, hexBlueLabel);
+
+		add(display, 0, 3, 3, 1);
 
 		setPrefHeight(getPrefHeight() + 200);
 	}
@@ -81,12 +92,15 @@ public class ColorMixerUI extends GridPane {
 	private void setupBindings() {
 		redSlider.valueProperty().bindBidirectional(pm.redProperty());
 		redLabel.textProperty().bind(pm.redProperty().asString()); //unidirektional da Label vom Benutzer nicht editiert werden kann
+		hexRedLabel.textProperty().bind(pm.hexRedProperty());
 
 		greenSlider.valueProperty().bindBidirectional((pm.greenProperty()));
 		greenLabel.textProperty().bind(pm.greenProperty().asString());
+		hexGreenLabel.textProperty().bind(pm.hexGreenProperty());
 
 		blueSlider.valueProperty().bindBidirectional(pm.blueProperty());
 		blueLabel.textProperty().bind(pm.blueProperty().asString());
+		hexBlueLabel.textProperty().bind(pm.hexBlueProperty());
 
 		display.fillProperty().bind(pm.colorProperty());
 
